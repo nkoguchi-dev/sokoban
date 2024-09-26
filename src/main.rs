@@ -1,4 +1,4 @@
-mod domain;
+pub mod domain;
 
 use crate::domain::map::*;
 
