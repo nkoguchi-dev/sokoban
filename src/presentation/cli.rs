@@ -1,3 +1,5 @@
+use crate::application::usecase::GameUseCase;
+
 pub struct CLIAdapter;
 
 impl CLIAdapter {
@@ -6,16 +8,19 @@ impl CLIAdapter {
     }
 
     pub fn run(&self) {
+        let mut game_usecase = GameUseCase::new();
         loop {
             // ユーザーにゲームの状態を表示
             self.display_game_state();
 
             // ユーザーから入力を受け取る
             let input = self.get_user_input();
-            match input.as_str() {
-                "w" | "a" | "s" | "d" => println!("input: {}", input),
-                "q" => break,
-                _ => continue,
+            match game_usecase.move_character(input.as_str()) {
+                Err(str) => {
+                    println!("終了します。 [{}]", str);
+                    break;
+                }
+                _ => {}
             }
         }
     }
