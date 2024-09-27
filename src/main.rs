@@ -1,8 +1,6 @@
-pub mod domain;
-
-use crate::domain::map::*;
+mod presentation;
 
 fn main() {
-    let _map = generate_map(4, 4);
-    println!("Hello, world!");
+    let cli = presentation::cli::CLIAdapter::new();
+    cli.run();
 }
