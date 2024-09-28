@@ -3,7 +3,9 @@ use std::io::{stdin, stdout};
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
-pub struct CLIAdapter {}
+pub struct CLIAdapter {
+    usecase: GameUseCase,
+}
 
 #[derive(Debug)]
 enum InputError {
@@ -13,14 +15,13 @@ enum InputError {
 }
 
 impl CLIAdapter {
-    pub fn new() -> Self {
-        CLIAdapter {}
+    pub fn new(usecase: GameUseCase) -> Self {
+        CLIAdapter { usecase }
     }
 
-    pub fn run(&self) {
+    pub fn run(&mut self) {
         let _stdout = stdout().into_raw_mode().unwrap();
         let stdin = stdin();
-        let mut game_usecase = GameUseCase::new();
 
         self.display_init();
         for c in stdin.keys() {
@@ -35,7 +36,7 @@ impl CLIAdapter {
                     InputError::OtherKey => continue,
                 },
             };
-            match game_usecase.move_character(command) {
+            match self.usecase.move_character(command) {
                 Ok(str) => println!("キーが押されました。{}", str),
                 Err(str) => {
                     println!("ゲーム処理でのエラー。 {}", str);
@@ -43,7 +44,7 @@ impl CLIAdapter {
                 }
             }
         }
-        game_usecase.quit_game();
+        self.usecase.quit_game();
     }
 
     fn display_init(&self) {

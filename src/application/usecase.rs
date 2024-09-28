@@ -5,7 +5,6 @@ pub enum InputCommands {
     DOWN,
     LEFT,
     RIGHT,
-    //QUIT,
 }
 
 impl GameUseCase {
@@ -19,7 +18,6 @@ impl GameUseCase {
             InputCommands::DOWN => Ok("down".to_string()),
             InputCommands::LEFT => Ok("left".to_string()),
             InputCommands::RIGHT => Ok("right".to_string()),
-            //InputCommands::QUIT => Err("quit".to_string()),
         }
     }
 
