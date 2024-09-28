@@ -1,41 +1,53 @@
-use crate::application::usecase::GameUseCase;
+use crate::application::usecase::{GameUseCase, InputCommands};
+use std::io::{stdin, stdout};
+use termion::input::TermRead;
+use termion::raw::IntoRawMode;
 
-pub struct CLIAdapter;
+pub struct CLIAdapter {}
 
 impl CLIAdapter {
     pub fn new() -> Self {
-        CLIAdapter
+        CLIAdapter {}
     }
 
     pub fn run(&self) {
+        let _stdout = stdout().into_raw_mode().unwrap();
+        let stdin = stdin();
         let mut game_usecase = GameUseCase::new();
-        loop {
+
+        self.display_init();
+        for c in stdin.keys() {
             // ユーザーにゲームの状態を表示
             self.display_game_state();
+            let input = match c.unwrap() {
+                termion::event::Key::Char('w') => InputCommands::UP,
+                termion::event::Key::Char('s') => InputCommands::DOWN,
+                termion::event::Key::Char('d') => InputCommands::LEFT,
+                termion::event::Key::Char('a') => InputCommands::RIGHT,
+                termion::event::Key::Char('q') | termion::event::Key::Ctrl('c') => {
+                    InputCommands::QUIT
+                }
 
-            // ユーザーから入力を受け取る
-            let input = self.get_user_input();
-            match game_usecase.move_character(input.as_str()) {
+                _ => {
+                    println!("{}無効なキーが押されました", termion::clear::CurrentLine);
+                    continue;
+                }
+            };
+            match game_usecase.move_character(input) {
+                Ok(str) => println!("キーが押されました。{}", str),
                 Err(str) => {
-                    println!("終了します。 [{}]", str);
+                    println!("終了します。 {}", str);
                     break;
                 }
-                _ => {}
             }
         }
     }
 
-    fn display_game_state(&self) {
-        // 未実装
+    fn display_init(&self) {
+        print!("{}{}", termion::cursor::Goto(1, 1), termion::clear::All);
     }
 
-    // CLIでユーザーからの入力を取得する処理
-    fn get_user_input(&self) -> String {
-        println!("次の動きを入力してください (w/a/s/d/q): ");
-        let mut input = String::new();
-        std::io::stdin()
-            .read_line(&mut input)
-            .expect("入力に失敗しました");
-        input.trim().to_string()
+    fn display_game_state(&self) {
+        print!("{}{}", termion::clear::All, termion::cursor::Goto(1, 1));
     }
 }
