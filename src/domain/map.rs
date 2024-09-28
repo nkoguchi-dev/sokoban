@@ -50,6 +50,7 @@ mod tests {
     use super::*;
 
     #[test]
+    /// 指定サイズのMapを作り出すことができること
     fn test_generate_map() {
         let left = generate_map(4, 4);
         let blocks: HashMap<_, _> = (0..4)
