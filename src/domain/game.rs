@@ -1,5 +1,4 @@
 use crate::domain::map::Map;
-use std::fmt;
 
 pub struct Game {
     pub map: Map,
@@ -10,11 +9,5 @@ impl Game {
         Game {
             map: Map::new(width, height),
         }
-    }
-}
-
-impl fmt::Display for Game {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.map)
     }
 }

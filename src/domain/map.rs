@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::fmt;
 
 /// マスの位置を表す構造体
 /// 8x8のMapの場合x:0 , y:0 が左下でx:7, y:7が右上
@@ -49,34 +48,6 @@ impl Map {
             Some(value) => Some(&value.square_type),
             None => None,
         }
-    }
-}
-
-impl fmt::Display for Map {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut positions: Vec<&SquarePosition> = self.blocks.keys().collect();
-
-        // ソート処理
-        positions.sort_by(|a, b| {
-            if a.x != b.x {
-                a.x.cmp(&b.x)
-            } else {
-                a.y.cmp(&b.y)
-            }
-        });
-
-        // 各マスを対応する文字で表示
-        for key in positions {
-            if let Some(value) = self.blocks.get(key) {
-                let char = match value.square_type {
-                    SquareType::FLOOR => ' ',
-                    SquareType::WALL => '*',
-                };
-                write!(f, "{}", char)?;
-            }
-        }
-
-        Ok(())
     }
 }
 
