@@ -50,7 +50,7 @@ impl GameUseCase {
         };
         if !GameDomainService::can_move(&game.map, &game.player, &direction) {
             self.game_status = GameStatus::Playing(game); // 再びPlayingに戻す
-            return Err("その方向には動けません".to_string());
+            return Ok("その方向には動けません".to_string());
         };
         let new_game = game.move_player(direction);
         self.game_status = GameStatus::Playing(new_game);
@@ -73,7 +73,7 @@ impl GameUseCase {
                 let char = match game.map.get_square_type(&position) {
                     None => '?',
                     Some(square_type) => match square_type {
-                        SquareType::WALL => '*',
+                        SquareType::WALL => '■',
                         SquareType::FLOOR => {
                             if game.player.position == position {
                                 'P'
