@@ -1,4 +1,5 @@
 mod application;
+mod domain;
 mod presentation;
 
 use application::usecase::GameUseCase;
