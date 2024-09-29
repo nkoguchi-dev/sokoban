@@ -8,6 +8,25 @@ pub struct MapPosition {
     pub y: u32,
 }
 
+impl MapPosition {
+    pub fn r#move(&self, direction: &Direction) -> Self {
+        let (x, y) = match direction {
+            Direction::UP => (self.x, self.y + 1),
+            Direction::DOWN => (self.x, self.y - 1),
+            Direction::LEFT => (self.x + 1, self.y),
+            Direction::RIGHT => (self.x - 1, self.y),
+        };
+        MapPosition { x, y }
+    }
+}
+
+pub enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+}
+
 /// マスを表す構造体
 /// あとで荷物と人が表現される予定
 #[derive(PartialEq, Debug)]
@@ -39,9 +58,7 @@ impl Map {
             blocks: generate_blocks(width, height),
         }
     }
-}
 
-impl Map {
     pub fn get_square_type(&self, position: &MapPosition) -> Option<&SquareType> {
         let square = &self.blocks.get(position);
         match square {
