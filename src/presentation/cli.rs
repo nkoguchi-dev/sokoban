@@ -48,11 +48,6 @@ impl CLIAdapter {
         self.usecase.quit_game();
     }
 
-    fn display_init(&self) {
-        print!("{}{}", termion::cursor::Goto(1, 1), termion::clear::All);
-        stdout().flush().unwrap();
-    }
-
     fn display_game_state(&self) {
         println!("{}{}", termion::clear::All, termion::cursor::Goto(1, 1));
         let query_output = self.usecase.get_display_model();
