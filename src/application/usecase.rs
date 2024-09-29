@@ -71,9 +71,17 @@ impl GameUseCase {
             for x in 0..game.map.width {
                 let position = MapPosition { x, y };
                 let char = match game.map.get_square_type(&position) {
-                    Some(&SquareType::FLOOR) => ' ',
-                    Some(&SquareType::WALL) => '*',
-                    None => '?', // 該当なしの場合
+                    None => '?',
+                    Some(square_type) => match square_type {
+                        SquareType::WALL => '*',
+                        SquareType::FLOOR => {
+                            if game.player.position == position {
+                                'P'
+                            } else {
+                                ' '
+                            }
+                        }
+                    },
                 };
                 row.push(char);
             }

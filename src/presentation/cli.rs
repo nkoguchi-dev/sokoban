@@ -1,5 +1,5 @@
 use crate::application::usecase::{GameUseCase, InputCommands};
-use std::io::{stdin, stdout};
+use std::io::{stdin, stdout, Write};
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
@@ -24,9 +24,8 @@ impl CLIAdapter {
         let stdin = stdin();
 
         self.usecase.start_game(8, 8);
-        self.display_init();
+        self.display_game_state();
         for c in stdin.keys() {
-            self.display_game_state();
             let command = match self.get_user_input(c.unwrap()) {
                 Ok(command) => command,
                 Err(input_error) => match input_error {
@@ -44,16 +43,18 @@ impl CLIAdapter {
                     break;
                 }
             }
+            self.display_game_state();
         }
         self.usecase.quit_game();
     }
 
     fn display_init(&self) {
         print!("{}{}", termion::cursor::Goto(1, 1), termion::clear::All);
+        stdout().flush().unwrap();
     }
 
     fn display_game_state(&self) {
-        print!("{}{}", termion::clear::All, termion::cursor::Goto(1, 1));
+        println!("{}{}", termion::clear::All, termion::cursor::Goto(1, 1));
         let query_output = self.usecase.get_display_model();
         for y in 0..query_output.map.len() {
             let v = &query_output.map[y];
@@ -63,6 +64,7 @@ impl CLIAdapter {
                 print!("{}{}", termion::cursor::Goto(pos_x + 1, pos_y + 1), v[x]);
             }
         }
+        stdout().flush().unwrap();
     }
 
     fn get_user_input(&self, key: termion::event::Key) -> Result<InputCommands, InputError> {
