@@ -5,7 +5,7 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new(width: u16, height: u16) -> Self {
+    pub fn new(width: u32, height: u32) -> Self {
         Game {
             map: Map::new(width, height),
         }

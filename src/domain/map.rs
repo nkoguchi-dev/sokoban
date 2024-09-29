@@ -4,8 +4,8 @@ use std::collections::HashMap;
 /// 8x8のMapの場合x:0 , y:0 が左下でx:7, y:7が右上
 #[derive(PartialEq, Eq, Hash, Debug)]
 pub struct MapPosition {
-    pub x: u16,
-    pub y: u16,
+    pub x: u32,
+    pub y: u32,
 }
 
 /// マスを表す構造体
@@ -25,14 +25,14 @@ pub enum SquareType {
 /// Mapを表す構造体
 #[derive(PartialEq, Debug)]
 pub struct Map {
-    pub width: u16,
-    pub height: u16,
+    pub width: u32,
+    pub height: u32,
     blocks: HashMap<MapPosition, Square>,
 }
 
 impl Map {
     /// 指定サイズのMapを生成します
-    pub fn new(width: u16, height: u16) -> Self {
+    pub fn new(width: u32, height: u32) -> Self {
         Map {
             width: width,
             height: height,
@@ -52,7 +52,7 @@ impl Map {
 }
 
 /// 指定サイズのMapを生成します
-fn generate_blocks(width: u16, height: u16) -> HashMap<MapPosition, Square> {
+fn generate_blocks(width: u32, height: u32) -> HashMap<MapPosition, Square> {
     (0..width)
         .flat_map(|x| {
             (0..height).map(move |y| {

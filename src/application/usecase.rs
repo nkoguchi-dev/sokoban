@@ -21,7 +21,7 @@ impl GameUseCase {
         GameUseCase { game: None }
     }
 
-    pub fn start_game(&mut self, width: u16, height: u16) {
+    pub fn start_game(&mut self, width: u32, height: u32) {
         let game = Game::new(width, height);
         self.game = Some(game);
     }
