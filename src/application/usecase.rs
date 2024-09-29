@@ -29,11 +29,23 @@ impl GameUseCase {
         }
     }
 
+    /// ゲームを開始します
+    /// # arguments
+    /// - width: 作成するMapの幅を指定します
+    /// - height: 作成するMapの高さを指定します
     pub fn start_game(&mut self, width: u32, height: u32) {
         let game = Game::new(width, height);
         self.game_status = GameStatus::Playing(game);
     }
 
+    /// プレイヤーを指定方向に動かします
+    ///
+    /// # arguments
+    /// - command: 移動したい方向
+    ///
+    /// # return value
+    /// - Ok: 移動が完了した場合
+    /// - Err: ゲームの状態が移動可能ではなかった場合
     pub fn move_character(&mut self, command: InputCommands) -> Result<String, String> {
         let game = match std::mem::replace(&mut self.game_status, GameStatus::NotStarted) {
             GameStatus::NotStarted | GameStatus::Finished => {
@@ -57,6 +69,9 @@ impl GameUseCase {
         Ok("動いたよ".to_string())
     }
 
+    /// ゲームの状態表示に必要な情報を返却します
+    /// # return value
+    /// - GameStateQueryOutput: 表示用のゲームの状態を表す構造体
     pub fn get_display_model(&self) -> GameStateQueryOutput {
         let game = match &self.game_status {
             GameStatus::NotStarted | GameStatus::Finished => {
@@ -90,6 +105,7 @@ impl GameUseCase {
         GameStateQueryOutput { map: output_map }
     }
 
+    /// ゲームを終了します
     pub fn quit_game(&mut self) {
         self.game_status = GameStatus::Finished;
     }

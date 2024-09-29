@@ -1,3 +1,4 @@
+//! Mapモデルを定義します
 use std::collections::HashMap;
 
 /// マスの位置を表す構造体
@@ -9,6 +10,9 @@ pub struct MapPosition {
 }
 
 impl MapPosition {
+    /// 現在の位置から指定方向に移動した場合のPositionを返却します
+    /// # arguments
+    /// - direction: 取得したい位置の方向
     pub fn r#move(&self, direction: &Direction) -> Self {
         let (x, y) = match direction {
             Direction::UP => (self.x, self.y + 1),
@@ -20,6 +24,7 @@ impl MapPosition {
     }
 }
 
+/// 方向を表すモデル
 pub enum Direction {
     UP,
     DOWN,
@@ -28,7 +33,6 @@ pub enum Direction {
 }
 
 /// マスを表す構造体
-/// あとで荷物と人が表現される予定
 #[derive(PartialEq, Debug)]
 pub struct Square {
     square_type: SquareType,
@@ -44,13 +48,19 @@ pub enum SquareType {
 /// Mapを表す構造体
 #[derive(PartialEq, Debug)]
 pub struct Map {
+    /// Mapの幅
     pub width: u32,
+    /// Mapの高さ
     pub height: u32,
+    /// Mapの要素
     blocks: HashMap<MapPosition, Square>,
 }
 
 impl Map {
     /// 指定サイズのMapを生成します
+    /// # arugments
+    /// - width: 生成するMapの幅
+    /// - height: 生成するMapの高さ
     pub fn new(width: u32, height: u32) -> Self {
         Map {
             width: width,
@@ -59,6 +69,12 @@ impl Map {
         }
     }
 
+    /// 指定位置のマスのタイプを返却します
+    /// # arguments
+    /// - position: タイプを取得するマスの位置
+    /// # return value
+    /// Some: 指定位置のMapタイプ
+    /// None: 指定位置がMap外の場合
     pub fn get_square_type(&self, position: &MapPosition) -> Option<&SquareType> {
         let square = &self.blocks.get(position);
         match square {
