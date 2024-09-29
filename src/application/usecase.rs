@@ -1,5 +1,5 @@
 use crate::domain::game::Game;
-use crate::domain::map::{SquarePosition, SquareType};
+use crate::domain::map::{MapPosition, SquareType};
 
 pub struct GameUseCase {
     game: Option<Game>,
@@ -45,7 +45,7 @@ impl GameUseCase {
         for y in (0..game.map.height).rev() {
             let mut row = vec![];
             for x in 0..game.map.width {
-                let position = SquarePosition { x, y };
+                let position = MapPosition { x, y };
                 let char = match game.map.get_square_type(&position) {
                     Some(&SquareType::FLOOR) => ' ',
                     Some(&SquareType::WALL) => '*',

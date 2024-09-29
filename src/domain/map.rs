@@ -3,7 +3,7 @@ use std::collections::HashMap;
 /// マスの位置を表す構造体
 /// 8x8のMapの場合x:0 , y:0 が左下でx:7, y:7が右上
 #[derive(PartialEq, Eq, Hash, Debug)]
-pub struct SquarePosition {
+pub struct MapPosition {
     pub x: u16,
     pub y: u16,
 }
@@ -27,7 +27,7 @@ pub enum SquareType {
 pub struct Map {
     pub width: u16,
     pub height: u16,
-    blocks: HashMap<SquarePosition, Square>,
+    blocks: HashMap<MapPosition, Square>,
 }
 
 impl Map {
@@ -42,7 +42,7 @@ impl Map {
 }
 
 impl Map {
-    pub fn get_square_type(&self, position: &SquarePosition) -> Option<&SquareType> {
+    pub fn get_square_type(&self, position: &MapPosition) -> Option<&SquareType> {
         let square = &self.blocks.get(position);
         match square {
             Some(value) => Some(&value.square_type),
@@ -52,7 +52,7 @@ impl Map {
 }
 
 /// 指定サイズのMapを生成します
-fn generate_blocks(width: u16, height: u16) -> HashMap<SquarePosition, Square> {
+fn generate_blocks(width: u16, height: u16) -> HashMap<MapPosition, Square> {
     (0..width)
         .flat_map(|x| {
             (0..height).map(move |y| {
@@ -61,7 +61,7 @@ fn generate_blocks(width: u16, height: u16) -> HashMap<SquarePosition, Square> {
                 } else {
                     SquareType::FLOOR
                 };
-                (SquarePosition { x, y }, Square { square_type })
+                (MapPosition { x, y }, Square { square_type })
             })
         })
         .collect()
