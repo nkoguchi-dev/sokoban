@@ -1,12 +1,13 @@
 //! ゲームモデルとサービスを定義します
 
-use crate::domain::map::{Direction, Map, SquareType};
-use crate::domain::movable_entity::{MovableEntity, Player};
+use crate::domain::map::{Direction, Map, MapPosition, SquareType};
+use crate::domain::movable_entity::{Box, MovableEntity, Player};
 
 /// １回のゲームを表すモデル
 pub struct Game {
     pub map: Map,
     pub player: Player,
+    pub boxes: Vec<Box>,
 }
 
 impl Game {
@@ -21,6 +22,7 @@ impl Game {
         Game {
             map: Map::new(width, height),
             player: Player::new(1, 1),
+            boxes: vec![Box::new(MapPosition { x: 3, y: 3 })],
         }
     }
 
@@ -31,6 +33,7 @@ impl Game {
         Game {
             map: self.map,
             player: self.player.move_entity(direction),
+            boxes: self.boxes,
         }
     }
 }

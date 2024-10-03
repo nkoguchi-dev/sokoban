@@ -59,6 +59,8 @@ impl CLIAdapter {
                 print!("{}{}", termion::cursor::Goto(pos_x + 1, pos_y + 1), v[x]);
             }
         }
+        let under_map_position_y: u16 = query_output.map.len().try_into().unwrap();
+        print!("{}", termion::cursor::Goto(0, under_map_position_y + 1));
         stdout().flush().unwrap();
     }
 

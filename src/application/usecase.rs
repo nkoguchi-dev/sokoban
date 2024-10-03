@@ -89,13 +89,7 @@ impl GameUseCase {
                     None => '?',
                     Some(square_type) => match square_type {
                         SquareType::WALL => '■',
-                        SquareType::FLOOR => {
-                            if game.player.position == position {
-                                'P'
-                            } else {
-                                ' '
-                            }
-                        }
+                        SquareType::FLOOR => get_movable_display_character(&game, &position),
                     },
                 };
                 row.push(char);
@@ -108,5 +102,22 @@ impl GameUseCase {
     /// ゲームを終了します
     pub fn quit_game(&mut self) {
         self.game_status = GameStatus::Finished;
+    }
+}
+
+/// MapのPositionの状態を判定して表示する文字を返却します
+fn get_movable_display_character(game: &Game, position: &MapPosition) -> char {
+    if game.player.position == *position {
+        'P'
+    } else if game
+        .boxes
+        .iter()
+        .filter(|&pos| pos.position.x == position.x && pos.position.y == position.y)
+        .count()
+        != 0
+    {
+        'B'
+    } else {
+        ' '
     }
 }
